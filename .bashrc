@@ -1,4 +1,4 @@
-# =============================================================== #
+#  =============================================================== #
 #
 # PERSONAL $HOME/.bashrc FILE for bash-3.0 (or later)
 # By Emmanuel Rouat [no-email]
@@ -45,6 +45,11 @@ if [ -f /etc/bashrc ]; then
       . /etc/bashrc   # --> Read /etc/bashrc, if present.
 fi
 
+if [ -f ~/.bash_profile ]; then
+      . ~/.bash_profile
+fi
+
+
 
 #--------------------------------------------------------------
 #  Automatic setting of $DISPLAY (if not set already).
@@ -54,7 +59,6 @@ fi
 #+ troublesome) - however this code seems to work in a majority
 #+ of cases.
 #--------------------------------------------------------------
-
 function get_xserver ()
 {
     case $TERM in
@@ -95,7 +99,7 @@ alias debug="set -o nounset; set -o xtrace"
 ulimit -S -c 0      # Don't want coredumps.
 set -o notify
 set -o noclobber
-set -o ignoreeof
+#set -o ignoreeof
 
 
 # Enable options:
@@ -123,56 +127,44 @@ unset MAILCHECK        # Don't want my shell to warn me of incoming mail.
 # For example, I see 'Bold Red' as 'orange' on my screen,
 # hence the 'Green' 'BRed' 'Red' sequence I often use in my prompt.
 
-
 # Normal Colors
-Black='\e[0;30m'        # Black
-Red='\e[0;31m'          # Red
-Green='\e[0;32m'        # Green
-Yellow='\e[0;33m'       # Yellow
-Blue='\e[0;34m'         # Blue
-Purple='\e[0;35m'       # Purple
-Cyan='\e[0;36m'         # Cyan
-White='\e[0;37m'        # White
+Black='\033[0;30m'        # Black
+Red='\033[0;31m'          # Red
+Green='\033[0;32m'        # Green
+Yellow='\033[0;33m'       # Yellow
+Blue='\033[0;34m'         # Blue
+Purple='\033[0;35m'       # Purple
+Cyan='\033[0;36m'         # Cyan
+White='\033[0;37m'        # White
 
 # Bold
-BBlack='\e[1;30m'       # Black
-BRed='\e[1;31m'         # Red
-BGreen='\e[1;32m'       # Green
-BYellow='\e[1;33m'      # Yellow
-BBlue='\e[1;34m'        # Blue
-BPurple='\e[1;35m'      # Purple
-BCyan='\e[1;36m'        # Cyan
-BWhite='\e[1;37m'       # White
+BBlack='\033[1;30m'       # Black
+BRed='\033[1;31m'         # Red
+BGreen='\033[1;32m'       # Green
+BYellow='\033[1;33m'      # Yellow
+BBlue='\033[1;34m'        # Blue
+BPurple='\033[1;35m'      # Purple
+BCyan='\033[1;36m'        # Cyan
+BWhite='\033[1;37m'       # White
 
 # Background
-On_Black='\e[40m'       # Black
-On_Red='\e[41m'         # Red
-On_Green='\e[42m'       # Green
-On_Yellow='\e[43m'      # Yellow
-On_Blue='\e[44m'        # Blue
-On_Purple='\e[45m'      # Purple
-On_Cyan='\e[46m'        # Cyan
-On_White='\e[47m'       # White
+On_Black='\033[40m'       # Black
+On_Red='\033[41m'         # Red
+On_Green='\033[42m'       # Green
+On_Yellow='\033[43m'      # Yellow
+On_Blue='\033[44m'        # Blue
+On_Purple='\033[45m'      # Purple
+On_Cyan='\033[46m'        # Cyan
+On_White='\033[47m'       # White
 
-NC="\e[m"               # Color Reset
+NC="\033[m"               # Color Reset
 
 
 ALERT=${BWhite}${On_Red} # Bold White on red background
 
-
-
 echo -e "${BCyan}This is BASH ${BRed}${BASH_VERSION%.*}${BCyan}\
 - DISPLAY on ${BRed}$DISPLAY${NC}\n"
 date
-if [ -x /usr/games/fortune ]; then
-    /usr/games/fortune -s     # Makes our day a bit more fun.... :-)
-fi
-
-function _exit()              # Function to run upon exit of shell.
-{
-    echo -e "${BRed}Hasta la vista, baby${NC}"
-}
-trap _exit EXIT
 
 #-------------------------------------------------------------
 # Shell Prompt - for many examples, see:
@@ -260,33 +252,6 @@ function job_color()
     fi
 }
 
-# Adds some text in the terminal frame (if applicable).
-
-
-# Now we construct the prompt.
-PROMPT_COMMAND="history -a"
-case ${TERM} in
-  *term | rxvt | linux)
-        PS1="\[\$(load_color)\][\A\[${NC}\] "
-        # Time of day (with load info):
-        PS1="\[\$(load_color)\][\A\[${NC}\] "
-        # User@Host (with connection type info):
-        PS1=${PS1}"\[${SU}\]\u\[${NC}\]@\[${CNX}\]\h\[${NC}\] "
-        # PWD (with 'disk space' info):
-        PS1=${PS1}"\[\$(disk_color)\]\W]\[${NC}\] "
-        # Prompt (with 'job' info):
-        PS1=${PS1}"\[\$(job_color)\]>\[${NC}\] "
-        # Set title of current xterm:
-        PS1=${PS1}"\[\e]0;[\u@\h] \w\a\]"
-	PROMPT_COMMAND="${PS1}"
-	;;
-    *)
-        PS1="(\A \u@\h \W) > " # --> PS1="(\A \u@\h \w) > "
-                               # --> Shows full pathname of current dir.
-        ;;
-esac
-
-
 export TIMEFORMAT=$'\nreal %3R\tuser %3U\tsys %3S\tpcpu %P\n'
 export HISTIGNORE="&:bg:fg:ll:h"
 export HISTTIMEFORMAT="$(echo -e ${BCyan})[%d/%m %H:%M:%S]$(echo -e ${NC}) "
@@ -361,13 +326,13 @@ export LESS='-i -N -w  -z-4 -g -e -M -X -F -R -P%t?f%f \
 :stdin .?pb%pb\%:?lbLine %lb:?bbByte %bb:-...'
 
 # LESS man page colors (makes Man pages more readable).
-export LESS_TERMCAP_mb=$'\E[01;31m'
-export LESS_TERMCAP_md=$'\E[01;31m'
-export LESS_TERMCAP_me=$'\E[0m'
-export LESS_TERMCAP_se=$'\E[0m'
-export LESS_TERMCAP_so=$'\E[01;44;33m'
-export LESS_TERMCAP_ue=$'\E[0m'
-export LESS_TERMCAP_us=$'\E[01;32m'
+export LESS_TERMCAP_mb=$'\033[01;31m'
+export LESS_TERMCAP_md=$'\033[01;31m'
+export LESS_TERMCAP_me=$'\033[0m'
+export LESS_TERMCAP_se=$'\033[0m'
+export LESS_TERMCAP_so=$'\033[01;44;33m'
+export LESS_TERMCAP_ue=$'\033[0m'
+export LESS_TERMCAP_us=$'\033[01;32m'
 
 
 #-------------------------------------------------------------
@@ -391,7 +356,7 @@ function xtitle()
 {
     case "$TERM" in
     *term* | rxvt)
-        echo -en  "\e]0;$*\a" ;;
+        echo -en  "\033]0;$*\a" ;;
     *)  ;;
     esac
 }
