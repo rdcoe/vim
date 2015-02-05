@@ -272,7 +272,7 @@ export HOSTFILE=$HOME/.hosts    # Put a list of remote hosts in ~/.hosts
 #-------------------
 # Personnal Aliases
 #-------------------
-
+alias vless='vim -u /usr/share/vim/vim73/macros/less.vim'
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
