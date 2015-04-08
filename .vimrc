@@ -1,6 +1,10 @@
-"execute pathogen#infect()
-"syntax on
-"filetype plugin indent on
+execute pathogen#infect()
+filetype plugin indent on
+
+:set background=dark
+":colorscheme solarized
+:colorscheme candy "solarized
+:syntax on
 
 :nmap \l :setlocal number!
 :nmap \o :set paste!
@@ -22,11 +26,13 @@
 :nmap <C-p> :bprev
 
 " syntastic overrides for noobs
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
 
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 0
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+source thrift.vim
