@@ -2,7 +2,6 @@ execute pathogen#infect()
 filetype plugin indent on
 
 :set background=dark
-":colorscheme solarized
 :colorscheme candy "solarized
 :syntax on
 
@@ -34,5 +33,3 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-
-source ~/.vim/thrift.vim
